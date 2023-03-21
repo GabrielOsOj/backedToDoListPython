@@ -1,7 +1,7 @@
 import os as system
 
 # lista de tareas api it 1
-base_de_datos=[["tarea 1","la poderosa tarea 1","Incompleta"]]
+base_de_datos=[]
 
 # diccionarios con opciones
 menu_principal={1:"crear tarea",2:"editar tarea",3:"eliminar tarea",4:"salir del programa"}
@@ -20,13 +20,24 @@ def salto_de_linea(cantidad):
         print("\n")
 
 def ver_tareas():
+	print("======================== \033[7m Lista de tareas \033[0m ========================\n|Tarea\t\t|Descripcion\t\t\t\t|Estado")
+ 
 	if(len(base_de_datos)==0):
 		print("no hay tareas para mostrar")
 	else:
-     
-		print("Lista de tareas\n-----------------------------\n|Tarea |Descripcion | Estado")
+
 		for tarea in base_de_datos:
-			print("|"+str(tarea[0])+"|"+str(tarea[1])+"|"+str(tarea[2]))
+			
+			espacios=["","",""]
+
+			for i in range(15-len(tarea[0])):
+				espacios[0]+=" "
+			for i in range(39-len(tarea[1])):
+				espacios[1]+=" "
+			for i in range(10-len(tarea[2])):
+				espacios[2]+=" "
+
+			print("|"+str(tarea[0])+str(espacios[0])+"|"+str(tarea[1])+str(espacios[1])+"|"+str(tarea[2])+str(espacios[2]))
      
 def crear_tarea():
 	tarea=["nueva tarea","descripcion",""]
@@ -92,6 +103,7 @@ print("Bienvenido, seleccione una opcion:\n")
 
 while(True):
 	ver_tareas()
+	print("===================================================================")
 	mostrar_opciones(menu_principal)
 	seleccion_usuario=int(input())
 	limpiar_consola()
@@ -114,4 +126,6 @@ while(True):
 			print("opcion no valida!")
 			mostrar_opciones(menu_principal)
 			continue
+
+
 			
