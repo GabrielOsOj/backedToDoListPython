@@ -1,23 +1,34 @@
 import os as system
 
 # lista de tareas api it 1
-base_de_datos=[["tarea 1","",""],["tarea 2","",""]]
+base_de_datos=[]
 
 # diccionarios con opciones
-menu_principal={1:"crear tarea",2:"editar tarea",3:"eliminar tarea",4:"salir del programa"}
+menu_principal={0:"alternar estado",1:"crear tarea",2:"editar tarea",3:"eliminar tarea",4:"salir del programa"}
 
 menu_crear={1:"crear otra tarea",2:"volver al menu principal"}
 
 menu_eliminar={1:"cancelar",2:"eliminar"}
 
-# funciones del crud
-
+# funciones auxiliares
 def limpiar_consola():
     system.system("cls")
 
-def salto_de_linea(cantidad):
-    for i in range(cantidad):
-        print("\n")
+
+# funciones del crud
+
+def alternar_tarea():
+    
+	contador=1
+	for i in base_de_datos:
+		print(str(contador)+". "+i[0])
+		contador+=1
+    
+	print("Ingrese la tarea a alternar")
+	seleccion_usuario=int(input())-1
+	
+	base_de_datos[seleccion_usuario][2]="completa" if base_de_datos[seleccion_usuario][2]=="incompleta" else "incompleta"
+ 
 
 def ver_tareas():
 	print("======================== \033[47m Lista de tareas \033[0m ========================\n|Tarea\t\t|Descripcion\t\t\t\t|Estado")
@@ -37,7 +48,15 @@ def ver_tareas():
 			for i in range(10-len(tarea[2])):
 				espacios[2]+=" "
 
-			print("|"+str(tarea[0])+str(espacios[0])+"|"+str(tarea[1])+str(espacios[1])+"|"+str(tarea[2])+str(espacios[2]))
+			color_completa_incompleta=""
+  
+			if tarea[2]=="completa":
+				color_completa_incompleta="\033[1;42m"+" completa "+"\033[0m"
+			else:
+				color_completa_incompleta="\033[1;41m"+" incompleta "+"\033[0m"
+
+
+			print("|"+str(tarea[0])+str(espacios[0])+"|"+str(tarea[1])+str(espacios[1])+"|"+color_completa_incompleta+str(espacios[2]))
      
 def crear_tarea():
 	tarea=["nueva tarea","descripcion",""]
@@ -73,16 +92,57 @@ def crear_tarea():
 			elif(seleccion_usuario==2):
 				break
 			else:
-				print("seleccione una opcion valida!")
+				print("\033[1;41"+"seleccione una opcion valida!"+"\033[0m")
+				
 				      			
 		except:
-			print("ingrese un valor numerico")
-   
+			print("\033[1;42m"+"ingrese un valor numerico"+"\033[0m")
 		break
 
     
 def editar_tarea():
-    pass
+    
+	if(len(base_de_datos)==0):
+		print("No hay tareas para editar")
+		print("Enter. Regresar")
+		input()
+		return;
+
+	contador=1
+	for i in base_de_datos:
+		print(str(contador)+". "+i[0])
+		contador+=1
+   
+	try:
+		print("Ingrese el indice de la tarea que desea editar")
+		seleccion_usuario=int(input())
+
+		if seleccion_usuario>len(base_de_datos):
+			limpiar_consola()
+			print("\033[1;41m"+"Opcion invalida!"+"\033[0m")
+			editar_tarea()
+		
+		print("\033[1;43m"+"Titulo actual: "+base_de_datos[seleccion_usuario-1][0]+"\nDescripcion actual: "+base_de_datos[seleccion_usuario-1][1]+"\033[0m")
+  
+		print("ingrese nuevo titulo, deje en blanco para no editar")
+		nuevo_titulo=input()
+
+		print("ingrese nueva descripcion, deje en blanco para no editar")
+		nueva_descripcion=input() 
+
+		base_de_datos[seleccion_usuario-1][0]=nuevo_titulo if nuevo_titulo != "" else base_de_datos[seleccion_usuario-1][0]
+		base_de_datos[seleccion_usuario-1][1]=nueva_descripcion if nueva_descripcion != "" else base_de_datos[seleccion_usuario-1][1]
+			
+		print("\033[1;42m"+"La tarea se modifico correctamente!"+"\033[0m")
+		input()
+		return
+
+	except:
+		limpiar_consola()
+		print("\033[1;41m"+"¡Ingrese una opcion valida!"+"\033[0m")
+		editar_tarea()
+
+
 
 def eliminar_tarea():
     
@@ -134,13 +194,16 @@ while(True):
 		limpiar_consola()
 
 		match seleccion_usuario:
-				
+      
+			case 0:
+				alternar_tarea()
+				limpiar_consola()
 			case 1 :
 				crear_tarea()
 				limpiar_consola()
 			case 2 :
 				editar_tarea()
-				limpiar_consola()
+				
 			case 3:
 				eliminar_tarea()
 			case 4:
@@ -151,6 +214,7 @@ while(True):
 				print("opcion no valida!")
 				mostrar_opciones(menu_principal)
 				continue
+
 	except:
 		print("\033[1;41m"+"ingrese una opcion valida"+"\033[0m")
   
