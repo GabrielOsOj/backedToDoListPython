@@ -22,3 +22,7 @@ En este proyecto utilizo python para crear el backend de una lista de tareas, la
    - 0.3 Modifique la forma en la que se guardan las tareas, en ves de que se guarden en un diccionario, hice un array bidimencional, tambien se hicieron cambios visuales menores
    
    - 0.5 Cambios visuales, creacion de la funcion eliminar
+ 
+   - 0.8 Creacion de la funcion editar tareas, creacion de funcion alternar estado de tareas, cambios visuales
+
+
