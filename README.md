@@ -18,4 +18,7 @@ En este proyecto utilizo python para crear el backend de una lista de tareas, la
 ## Versiones y cambios
   
    - 0.1 Creacion basica del proyecto, no es funcional, cuenta solamente con la funcion de crear y ver tareas
+
+   - 0.3 Modifique la forma en la que se guardan las tareas, en ves de que se guarden en un diccionario, hice un array bidimencional, tambien se hicieron cambios visuales menores
    
+   - 0.5 Cambios visuales, creacion de la funcion eliminar
