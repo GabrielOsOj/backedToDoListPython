@@ -1,7 +1,7 @@
 import os as system
 
 # lista de tareas api it 1
-base_de_datos=[]
+base_de_datos=[["tarea 1","",""],["tarea 2","",""]]
 
 # diccionarios con opciones
 menu_principal={1:"crear tarea",2:"editar tarea",3:"eliminar tarea",4:"salir del programa"}
@@ -20,7 +20,7 @@ def salto_de_linea(cantidad):
         print("\n")
 
 def ver_tareas():
-	print("======================== \033[7m Lista de tareas \033[0m ========================\n|Tarea\t\t|Descripcion\t\t\t\t|Estado")
+	print("======================== \033[47m Lista de tareas \033[0m ========================\n|Tarea\t\t|Descripcion\t\t\t\t|Estado")
  
 	if(len(base_de_datos)==0):
 		print("no hay tareas para mostrar")
@@ -42,16 +42,15 @@ def ver_tareas():
 def crear_tarea():
 	tarea=["nueva tarea","descripcion",""]
 
-	print("ingrese un titulo para la tarea")
-	tarea[0]=input()
+	print("ingrese un titulo para la tarea (maximo 15 caracteres)")
+	tarea[0]=input()[0:15]
     
 	print("ingrese la tarea, maximo 30 caracteres")
-	tarea[1] = input()
+	tarea[1] = input()[0:30]
 	tarea[2]="incompleta"
 	
 	# usar operador ternario 
 	
- 
 	if(tarea==""):
 		tarea="nueva tarea"
 	
@@ -60,8 +59,9 @@ def crear_tarea():
  
 	base_de_datos.append(tarea)
 	limpiar_consola()
-	print("la tarea: ",tarea[0]," se guardo exitosamente!")
+	print("\033[1;42m"+"la tarea: ",tarea[0]," se guardo exitosamente!"+"\033[0m")
 	
+ 
 	while(True):
 		try:	
 			mostrar_opciones(menu_crear)
@@ -85,12 +85,36 @@ def editar_tarea():
     pass
 
 def eliminar_tarea():
-	print("seleccione la tarea para eliminar")
-	
-	for i in base_de_datos.items():
-		print(i)
+    
+	if(len(base_de_datos)==0):
+		print("No hay tareas para borrar")
+		print("Enter. Regresar")
+		input()
+		return;
+    
+	try:
+		contador=1
+		for i in base_de_datos:
+			print(str(contador)+". "+i[0])
+			contador+=1
+		
+		print("Ingrese el numero de la tarea que quiere eliminar, escriba 0 para volver atras")
+		seleccion_usuario=int(input())
 
+		if(seleccion_usuario==0):
+			return		
+  
+		base_de_datos.pop(seleccion_usuario-1)
+		print("\033[42m"+"la tarea se elimino correctamente"+"\033[0m")
+		input()
+		limpiar_consola()
+		return
 
+	except:
+			limpiar_consola()
+			print("Ingrese un valor valido!")
+			eliminar_tarea()		
+   
 
 def mostrar_opciones(menu):
     
@@ -102,30 +126,33 @@ def mostrar_opciones(menu):
 print("Bienvenido, seleccione una opcion:\n")
 
 while(True):
-	ver_tareas()
-	print("===================================================================")
-	mostrar_opciones(menu_principal)
-	seleccion_usuario=int(input())
-	limpiar_consola()
+	try:
+		ver_tareas()
+		print("===================================================================")
+		mostrar_opciones(menu_principal)
+		seleccion_usuario=int(input())
+		limpiar_consola()
 
-	match seleccion_usuario:
+		match seleccion_usuario:
 				
-		case 1 :
-			crear_tarea()
-			limpiar_consola()
-		case 2 :
-			editar_tarea()
-			limpiar_consola()
-		case 3:
-			eliminar_tarea()
-		case 4:
-			limpiar_consola()
-			print("gracias por usar usarme :D")
-			break
-		case _:
-			print("opcion no valida!")
-			mostrar_opciones(menu_principal)
-			continue
-
+			case 1 :
+				crear_tarea()
+				limpiar_consola()
+			case 2 :
+				editar_tarea()
+				limpiar_consola()
+			case 3:
+				eliminar_tarea()
+			case 4:
+				limpiar_consola()
+				print("gracias por usar usarme :D")
+				break
+			case _:
+				print("opcion no valida!")
+				mostrar_opciones(menu_principal)
+				continue
+	except:
+		print("\033[1;41m"+"ingrese una opcion valida"+"\033[0m")
+  
 
 			
