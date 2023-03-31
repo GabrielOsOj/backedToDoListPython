@@ -14,20 +14,29 @@ menu_eliminar={1:"cancelar",2:"eliminar"}
 def limpiar_consola():
     system.system("cls")
 
+def mostrar_opciones(menu):
+    
+	for opcion in menu.items():
+		print(opcion[0],":",opcion[1])
 
-# funciones del crud
-def alternar_tarea():
+def base_de_datos_vacia(nombre):
+    if len(base_de_datos)==0:
+        print("\033[1;43m"+" No hay tareas para "+nombre+"\033[0m")
+        input()
+        return True
     
-	if(len(base_de_datos)==0):
-		print("No hay tareas para alternar")
-		print("Enter. Regresar")
-		input()
-		return;
-    
+def mostrar_indice_tarea():
 	contador=1
 	for i in base_de_datos:
 		print(str(contador)+". "+i[0])
 		contador+=1
+
+# funciones del crud
+def alternar_tarea():
+    
+	if base_de_datos_vacia("alternar"): return
+    
+	mostrar_indice_tarea()
     
 	try:
 		seleccion_usuario=int(input("Ingrese la tarea a alternar, 0 para volver atras\n"))-1
@@ -36,43 +45,38 @@ def alternar_tarea():
 			return
 
 		base_de_datos[seleccion_usuario][2]="completa" if base_de_datos[seleccion_usuario][2]=="incompleta" else "incompleta"
-		limpiar_consola()
   
 	except:
 		limpiar_consola()
 		print("\033[1;41m"+" opcion no valida "+"\033[0m")
 		alternar_tarea()
-	
-	return
 
 
 def ver_tareas():
-	print("======================== \033[47m Lista de tareas \033[0m ========================\n|Tarea\t\t|Descripcion\t\t\t\t|Estado")
+	print("======================== Lista de tareas ========================\n|Tarea\t\t|Descripcion\t\t\t\t|Estado")
  
-	if(len(base_de_datos)==0):
+	if len(base_de_datos)==0:
 		print("no hay tareas para mostrar")
-	else:
 
-		for tarea in base_de_datos:
+	for tarea in base_de_datos:
 			
-			espacios=["","",""]
+		espacios=["","",""]
 
-			for i in range(15-len(tarea[0])):
+		for i in range(15-len(tarea[0])):
 				espacios[0]+=" "
-			for i in range(39-len(tarea[1])):
+		for i in range(39-len(tarea[1])):
 				espacios[1]+=" "
-			for i in range(10-len(tarea[2])):
+		for i in range(10-len(tarea[2])):
 				espacios[2]+=" "
 
-			color_completa_incompleta=""
+		color_completa_incompleta=""
   
-			if tarea[2]=="completa":
-				color_completa_incompleta="\033[1;42m"+" completa "+"\033[0m"
-			else:
-				color_completa_incompleta="\033[1;41m"+" incompleta "+"\033[0m"
+		if tarea[2]=="completa":
+			color_completa_incompleta="\033[1;42m"+" completa "+"\033[0m"
+		else:
+			color_completa_incompleta="\033[1;41m"+" incompleta "+"\033[0m"
 
-
-			print("|"+str(tarea[0])+str(espacios[0])+"|"+str(tarea[1])+str(espacios[1])+"|"+color_completa_incompleta+str(espacios[2]))
+		print("|"+str(tarea[0])+str(espacios[0])+"|"+str(tarea[1])+str(espacios[1])+"|"+color_completa_incompleta+str(espacios[2]))
      
 def crear_tarea():
 	tarea=["nueva tarea","descripcion",""]
@@ -102,8 +106,7 @@ def crear_tarea():
 				break
 			else:
 				print("\033[1;41"+"seleccione una opcion valida!"+"\033[0m")
-				
-				      			
+							      			
 		except:
 			print("\033[1;42m"+"ingrese un valor numerico"+"\033[0m")
 		break
@@ -111,17 +114,10 @@ def crear_tarea():
     
 def editar_tarea():
     
-	if(len(base_de_datos)==0):
-		print("No hay tareas para editar")
-		print("Enter. Regresar")
-		input()
-		return;
-
-	contador=1
-	for i in base_de_datos:
-		print(str(contador)+". "+i[0])
-		contador+=1
-   
+	if base_de_datos_vacia("editar"): return
+	
+	mostrar_indice_tarea()
+ 
 	try:
 		print("Ingrese el indice de la tarea que desea editar")
 		seleccion_usuario=int(input())
@@ -133,17 +129,15 @@ def editar_tarea():
 		
 		print("\033[1;43m"+"Titulo actual: "+base_de_datos[seleccion_usuario-1][0]+"\nDescripcion actual: "+base_de_datos[seleccion_usuario-1][1]+"\033[0m")
   
-		print("ingrese nuevo titulo, deje en blanco para no editar")
-		nuevo_titulo=input()
-
-		print("ingrese nueva descripcion, deje en blanco para no editar")
-		nueva_descripcion=input() 
+		nuevo_titulo=input("ingrese nuevo titulo, deje en blanco para no editar\n")
+  
+		nueva_descripcion=input("ingrese nueva descripcion, deje en blanco para no editar\n") 
 
 		base_de_datos[seleccion_usuario-1][0]=nuevo_titulo if nuevo_titulo != "" else base_de_datos[seleccion_usuario-1][0]
 		base_de_datos[seleccion_usuario-1][1]=nueva_descripcion if nueva_descripcion != "" else base_de_datos[seleccion_usuario-1][1]
 			
-		print("\033[1;42m"+"La tarea se modifico correctamente!"+"\033[0m")
-		input()
+		input("\033[1;42m"+" La tarea se modifico correctamente "+"\033[0m"+"\n")
+		limpiar_consola()
 		return
 
 	except:
@@ -152,47 +146,28 @@ def editar_tarea():
 		editar_tarea()
 
 
-
 def eliminar_tarea():
     
-	if(len(base_de_datos)==0):
-		print("No hay tareas para borrar")
-		print("Enter. Regresar")
-		input()
-		return;
+	if base_de_datos_vacia("eliminar"): return
     
 	try:
-		contador=1
-		for i in base_de_datos:
-			print(str(contador)+". "+i[0])
-			contador+=1
+		mostrar_indice_tarea()
 		
-		print("Ingrese el numero de la tarea que quiere eliminar, escriba 0 para volver atras")
-		seleccion_usuario=int(input())
+		seleccion_usuario=int(input("Ingrese el numero de la tarea que quiere eliminar, escriba 0 para volver atras\n"))
 
-		if(seleccion_usuario==0):
-			return		
+		if seleccion_usuario==0 : return		
   
 		base_de_datos.pop(seleccion_usuario-1)
-		print("\033[42m"+"la tarea se elimino correctamente"+"\033[0m")
-		input()
+		input("\033[42m"+"la tarea se elimino correctamente"+"\033[0m"+"\n")
 		limpiar_consola()
 		return
 
 	except:
-			limpiar_consola()
-			print("Ingrese un valor valido!")
-			eliminar_tarea()		
+		limpiar_consola()
+		print("\033[1;41"+" Ingrese un valor valido "+"\033[0m")
+		eliminar_tarea()		
    
-
-def mostrar_opciones(menu):
-    
-	for opcion in menu.items():
-		print(opcion[0],":",opcion[1])
-
-
 # main while
-print("Bienvenido, seleccione una opcion:\n")
 
 while(True):
 	try:
@@ -207,12 +182,12 @@ while(True):
 			case 0:
 				alternar_tarea()
 				limpiar_consola()
+				
 			case 1 :
 				crear_tarea()
 				limpiar_consola()
 			case 2 :
 				editar_tarea()
-				
 			case 3:
 				eliminar_tarea()
 			case 4:
@@ -225,7 +200,6 @@ while(True):
 				continue
 
 	except:
-		print("\033[1;41m"+"ingrese una opcion valida"+"\033[0m")
+		limpiar_consola()
+		print("\033[1;41m"+" Ingrese una opcion valida "+"\033[0m")
   
-
-			
