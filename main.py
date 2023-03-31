@@ -16,19 +16,35 @@ def limpiar_consola():
 
 
 # funciones del crud
-
 def alternar_tarea():
+    
+	if(len(base_de_datos)==0):
+		print("No hay tareas para alternar")
+		print("Enter. Regresar")
+		input()
+		return;
     
 	contador=1
 	for i in base_de_datos:
 		print(str(contador)+". "+i[0])
 		contador+=1
     
-	print("Ingrese la tarea a alternar")
-	seleccion_usuario=int(input())-1
+	try:
+		seleccion_usuario=int(input("Ingrese la tarea a alternar, 0 para volver atras\n"))-1
+		
+		if(seleccion_usuario==-1):
+			return
+
+		base_de_datos[seleccion_usuario][2]="completa" if base_de_datos[seleccion_usuario][2]=="incompleta" else "incompleta"
+		limpiar_consola()
+  
+	except:
+		limpiar_consola()
+		print("\033[1;41m"+" opcion no valida "+"\033[0m")
+		alternar_tarea()
 	
-	base_de_datos[seleccion_usuario][2]="completa" if base_de_datos[seleccion_usuario][2]=="incompleta" else "incompleta"
- 
+	return
+
 
 def ver_tareas():
 	print("======================== \033[47m Lista de tareas \033[0m ========================\n|Tarea\t\t|Descripcion\t\t\t\t|Estado")
@@ -61,26 +77,19 @@ def ver_tareas():
 def crear_tarea():
 	tarea=["nueva tarea","descripcion",""]
 
-	print("ingrese un titulo para la tarea (maximo 15 caracteres)")
-	tarea[0]=input()[0:15]
+	# print("ingrese un titulo para la tarea (maximo 15 caracteres)")
+	nuevoTitulo=input("ingrese un titulo para la tarea (maximo 15 caracteres)\n")[0:15]
     
-	print("ingrese la tarea, maximo 30 caracteres")
-	tarea[1] = input()[0:30]
+	nuevaDescripcion = input("ingrese la tarea, maximo 30 caracteres\n")[0:30]
+ 
+	tarea[0]="sin titulo" if nuevoTitulo=="" else nuevoTitulo
+	tarea[1] ="sin descripcion" if nuevaDescripcion=="" else nuevaDescripcion
 	tarea[2]="incompleta"
 	
-	# usar operador ternario 
-	
-	if(tarea==""):
-		tarea="nueva tarea"
-	
-	if(tarea==""):
-		tarea="descripcion"
- 
 	base_de_datos.append(tarea)
 	limpiar_consola()
 	print("\033[1;42m"+"la tarea: ",tarea[0]," se guardo exitosamente!"+"\033[0m")
 	
- 
 	while(True):
 		try:	
 			mostrar_opciones(menu_crear)
