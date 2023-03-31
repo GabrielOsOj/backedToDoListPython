@@ -35,7 +35,7 @@ En este proyecto utilizo python para crear el backend de una lista de tareas, la
  Cada version final, se utiliza y despliega de forma diferente, todas usan python 3.10.5
 
 ## Instrucciones comunes a las 3 versiones
-----
+
  1. Instalamos python en la version 3.10.5 y lo configuramos
 
  2. Descargamos el repositorio, puede ser con git clone :
